@@ -4,3 +4,21 @@ class Agent:
     def __init__(self, sk, pk):
         self.sk = sk
         self.pk = pk
+
+
+    def create_coin(self, store):
+        coin = Coin()
+        store.coins.append(coin)
+        return coin
+
+
+
+class CoinStore:
+
+    def __init__(self, path):
+        self.coins = []
+
+
+
+class Coin:
+    pass
