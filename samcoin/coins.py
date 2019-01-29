@@ -21,4 +21,6 @@ class CoinStore:
 
 
 class Coin:
-    pass
+
+    def __init__(self, id):
+        self.id = id
