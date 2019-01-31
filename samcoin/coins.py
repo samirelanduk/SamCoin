@@ -1,6 +1,6 @@
 import struct
 from .cryptography import sign
-from .config import STORE
+from .config import STORE, SK, PK
 
 class Agent:
     """A person"""
@@ -8,6 +8,8 @@ class Agent:
     def __init__(self, sk, pk):
         self.sk = sk
         self.pk = pk
+        self.manager = self.sk.exportKey() == SK.encode()
+
 
 
     def get_store(self):

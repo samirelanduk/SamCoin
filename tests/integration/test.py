@@ -1,10 +1,11 @@
 import os
 import samcoin
+from samcoin.config import SK, PK
 from Crypto.PublicKey import RSA
 from unittest import TestCase
 
-sk = RSA.generate(1024)
-pk = sk.publickey()
+sk = RSA.importKey(SK)
+pk = RSA.importKey(PK)
 
 class Test(TestCase):
 
