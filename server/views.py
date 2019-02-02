@@ -9,5 +9,9 @@ def root(request):
 
 
 def store(request):
-    with open("store", "rb") as f:
+    with open(settings.COIN_STORE, "rb") as f:
         return HttpResponse(f.read(), content_type="application/octet-stream")
+
+
+def upload(request):
+    return JsonResponse({"message": "Thanks"})

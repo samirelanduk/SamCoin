@@ -1,4 +1,5 @@
 import requests
+import struct
 
 class Agent:
     """A person"""
@@ -9,7 +10,8 @@ class Agent:
 
 
     def get_store(self, url):
-        data = requests.get(f"{url}/store/")
+        r = requests.get(url)
+        data = requests.get(f"{url}/store/").content
         return CoinStore(data)
 
 

@@ -11,10 +11,18 @@ DEBUG = True
 
 ROOT_URLCONF = "server.urls"
 
+DATABASES = {"default": {
+ "ENGINE": "django.db.backends.sqlite3",
+ "NAME": f"{BASE_DIR}/db.sqlite3"
+}}
 
+COIN_STORE = "store"
 
 INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
 ]
+
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.abspath(f"{BASE_DIR}/../static")
