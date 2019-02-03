@@ -1,5 +1,6 @@
 import requests
 import struct
+from .cryptography import sign
 
 class Agent:
     """A person"""
@@ -13,6 +14,15 @@ class Agent:
         r = requests.get(url)
         data = requests.get(f"{url}/store/").content
         return CoinStore(data)
+
+
+    def make_coin(self, url):
+        store = self.get_store(url)
+        new_id = max([c.id for c in store.coins] or [-1]) + 1
+        body = (new_id).to_bytes(2, byteorder="big")
+        sig = sign(body, self.sk)
+        b = body + sig
+        requests.post(f"{url}/store/", data=b)
 
 
 

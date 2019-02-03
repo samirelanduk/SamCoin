@@ -58,3 +58,7 @@ class Test(LiveServerTestCase):
         client = samcoin.Agent(sk, pk)
         store = client.get_store(self.live_server_url)
         self.assertEqual(store.coins, [])
+
+        client.make_coin(self.live_server_url)
+        store = client.get_store(self.live_server_url)
+        self.assertEqual(len(store.coins), 1)
