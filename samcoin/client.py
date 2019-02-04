@@ -22,7 +22,9 @@ class Agent:
         body = (new_id).to_bytes(2, byteorder="big")
         sig = sign(body, self.sk)
         b = body + sig
-        requests.post(f"{url}/store/", data=b)
+        response = requests.post(f"{url}/store/", data=b)
+        if response.status_code != 200:
+            raise Exception(response.text)
 
 
 

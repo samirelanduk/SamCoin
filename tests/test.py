@@ -51,12 +51,21 @@ class Test(LiveServerTestCase):
 
 
     def test(self):
-        client = samcoin.Agent(SK, PK)
-        store = client.get_store(self.live_server_url)
+        sam = samcoin.Agent(SK, PK)
+        store = sam.get_store(self.live_server_url)
         self.assertEqual(store.coins, [])
 
-        client.make_coin(self.live_server_url)
-        store = client.get_store(self.live_server_url)
+        sam.make_coin(self.live_server_url)
+        store = sam.get_store(self.live_server_url)
         self.assertEqual(len(store.coins), 1)
 
-        self.assertEqual(store.coins[0].owner, client.pk)
+        self.assertEqual(store.coins[0].owner, sam.pk)
+
+        key = RSA.generate(1024)
+        new_sk = key.export_key().decode()
+        new_pk = key.publickey().export_key()
+        new_person = samcoin.Agent(new_sk, new_pk)
+        store = new_person.get_store(self.live_server_url)
+        self.assertEqual(len(store.coins), 1)
+        with self.assertRaises(Exception):
+            new_person.make_coin(self.live_server_url)
