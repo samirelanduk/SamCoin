@@ -1,6 +1,6 @@
 import requests
 import struct
-from .cryptography import sign
+from .cryptography import sign, PK
 
 class Agent:
     """A person"""
@@ -33,6 +33,8 @@ class CoinStore:
         self.coins = []
         for n in range(chunk_num):
             self.coins.append(Coin(bytestring[n * 130: n * 130 + 130]))
+        for coin in self.coins:
+            coin.owner = PK
 
 
 

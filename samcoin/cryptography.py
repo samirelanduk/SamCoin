@@ -12,6 +12,7 @@ def sign(data, sk):
     :param RsaKey sk: the private key to sign with.
     :rtype: ``bytes``"""
 
+    sk = RSA.importKey(sk)
     digest = SHA256.new()
     digest.update(b64encode(data))
     signer = PKCS1_v1_5.new(sk)
@@ -28,7 +29,16 @@ def verify_sign(sig, data, pk):
     :param RsaKey pk: the public key check.
     :rtype: ``bool``"""
 
+    pk = RSA.importKey(pk)
     verifier = PKCS1_v1_5.new(pk)
     digest = SHA256.new()
     digest.update(b64encode(data))
     return verifier.verify(digest, sig)
+
+
+PK = """-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDcuBqHnP4ShHIv4UgnS6Hluf/R
+C53STkkijudU3hmIWRn2+PoehSH8M8Ef+23WQvBYqBUR+kVVtBiUFNfgkvIdFyHo
+jU1fE3Fq7mfOKZcNPsr6rXGrWjwRi2acHocm/yCPahsZcqb7QyW48wDzwRiYV0hu
+/2td6+9gL0nk0fYtjwIDAQAB
+-----END PUBLIC KEY-----"""
