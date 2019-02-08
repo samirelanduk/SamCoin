@@ -1,4 +1,5 @@
 import os
+import requests
 from Crypto.PublicKey import RSA
 from django.test.testcases import LiveServerTestCase
 from django.test.utils import override_settings
@@ -50,6 +51,22 @@ class Test(LiveServerTestCase):
         self.assertFalse(samcoin.verify_sign(sig, message[:-1], SK))
 
 
+    def test_api(self):
+        # There is an empty store
+        store = requests.get(self.live_server_url + "/store/").content
+        self.assertEqual(store, b"")
+
+        # A coin can be created if signed properly
+        coin_id = b"\xc9\x1b"
+        sig = samcoin.sign(coin_id, SK)
+        coin = coin_id + sig
+        response = requests.post(self.live_server_url + "/coin", data=coin)
+        self.assertEqual(response.status_code, 200)
+        store = requests.get(self.live_server_url + "/store/").content
+        self.assertEqual(store, coin)
+
+
+
     def test(self):
         sam = samcoin.Agent(SK, PK)
         store = sam.get_store(self.live_server_url)
@@ -62,8 +79,8 @@ class Test(LiveServerTestCase):
         self.assertEqual(store.coins[0].owner, sam.pk)
 
         key = RSA.generate(1024)
-        new_sk = key.export_key().decode()
-        new_pk = key.publickey().export_key()
+        new_sk = key.exportKey().decode()
+        new_pk = key.publickey().exportKey()
         new_person = samcoin.Agent(new_sk, new_pk)
         store = new_person.get_store(self.live_server_url)
         self.assertEqual(len(store.coins), 1)
