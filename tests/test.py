@@ -65,6 +65,32 @@ class Test(LiveServerTestCase):
         store = requests.get(self.live_server_url + "/store/").content
         self.assertEqual(store, coin)
 
+        # Coins can't be created if not properly signed
+        coin_id = b"\xc9\x23"
+        key = RSA.generate(1024)
+        new_sk = key.exportKey().decode()
+        new_pk = key.publickey().exportKey()
+        sig = samcoin.sign(coin_id, new_sk)
+        bad_coin = coin_id + sig
+        response = requests.post(self.live_server_url + "/coin", data=bad_coin)
+        self.assertEqual(response.status_code, 403)
+        store = requests.get(self.live_server_url + "/store/").content
+        self.assertEqual(store, coin)
+
+        # Make another coin
+        coin_id = b"\xc9\x23"
+        sig = samcoin.sign(coin_id, SK)
+        coin2 = coin_id + sig
+        response = requests.post(self.live_server_url + "/coin", data=coin2)
+        self.assertEqual(response.status_code, 200)
+        store = requests.get(self.live_server_url + "/store/").content
+        self.assertEqual(store, coin + coin2)
+
+        # Coin ID must be unique
+        response = requests.post(self.live_server_url + "/coin", data=coin2)
+        self.assertEqual(response.status_code, 409)
+        store = requests.get(self.live_server_url + "/store/").content
+        self.assertEqual(store, coin + coin2)
 
 
     def test(self):
