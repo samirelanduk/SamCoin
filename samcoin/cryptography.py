@@ -36,6 +36,10 @@ def verify_sign(sig, data, pk):
     return verifier.verify(digest, sig)
 
 
+def hash(data):
+    return SHA256.new(data=data).digest()
+
+
 PK = """-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDcuBqHnP4ShHIv4UgnS6Hluf/R
 C53STkkijudU3hmIWRn2+PoehSH8M8Ef+23WQvBYqBUR+kVVtBiUFNfgkvIdFyHo

@@ -27,6 +27,14 @@ def submit_coin(request):
             return JsonResponse({"message": "Not authorized!"}, status=403)
 
 
+def make_payment(request):
+    if request.method == "POST":
+        data = request.body
+        with open(settings.COIN_STORE, "ab") as f:
+            f.write(data)
+        return JsonResponse({"message": "Thanks"})
+
+
 def store(request):
     if request.method == "POST":
         data = request.body

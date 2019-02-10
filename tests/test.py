@@ -92,6 +92,17 @@ class Test(LiveServerTestCase):
         store = requests.get(self.live_server_url + "/store/").content
         self.assertEqual(store, coin + coin2)
 
+        # Manager can spend coin they created
+        location = (0).to_bytes(2, byteorder="big")
+        block_hash = samcoin.hash(coin)
+        payment = new_pk + location + block_hash
+        sig = samcoin.sign(payment, SK)
+        payment += sig
+        response = requests.post(self.live_server_url + "/pay", data=payment)
+        self.assertEqual(response.status_code, 200)
+        store = requests.get(self.live_server_url + "/store/").content
+        self.assertEqual(store, coin + coin2 + payment)
+
 
     def test(self):
         sam = samcoin.Agent(SK, PK)

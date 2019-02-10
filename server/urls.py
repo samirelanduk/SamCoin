@@ -4,5 +4,6 @@ from .views import *
 urlpatterns = [
  path(r"store/", store),
  path(r"coin", submit_coin),
+ path(r"pay", make_payment),
  path(r"", root),
 ]
