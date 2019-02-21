@@ -13,3 +13,12 @@ class Tests(TestCase):
         string3 = b"For in that sleep of death what dreams may comeX"
         hsh3 = samcoin.hash(string3)
         self.assertNotEqual(hsh, hsh3)
+
+
+    def test_block_chains(self):
+        blockchain = samcoin.Blockchain()
+        self.assertEqual(blockchain.data, b"")
+        self.assertEqual(blockchain.items(), [])
+        blockchain.append(b"GRANITA")
+        self.assertEqual(blockchain.items(), [b"GRANITA"])
+        self.assertEqual(blockchain.data, b"\x00\x00\x00\x00GRANITA")
